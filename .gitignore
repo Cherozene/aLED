@@ -1,1 +1,3 @@
 misc_tests/*
+ihm/scripts/config.ini
+*__pycache__*

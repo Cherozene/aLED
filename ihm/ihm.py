@@ -235,4 +235,6 @@ win = AmbilightIHM()
 win.show()
 app.exec()
 
+# TODO : effacer le fichier de config temporaire
+
 print('Closing')
