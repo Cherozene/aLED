@@ -139,7 +139,8 @@ def screencap(ser):
         
         ### à partir des tableaux led_val_ZZZZ crée le bon string data
         data = prep_data(led_val_top, led_val_down, led_val_right, led_val_left, first_led=ORDER_START, order=ORDER_WAY)
-
+        #print(data)
+        #print()
         ### on envoie le string "data" au format LED_ID,R,G,B;LED_ID,R,G,B;LED_ID,R,G,B;...;LED_ID,R,G,B;
         send_data(ser, data)     
         
@@ -147,11 +148,13 @@ def screencap(ser):
         #print(end_time - start_time)
         #times_save.append(end_time - start_time) #en moyenne sur 1000 tours, 0.0654s avec mss. 0.08 avec pyautogui
         #print(data)
+        #time.sleep(0.3)
 
 if __name__ == '__main__':
 
     # initilisation du lien série avec l'Arduino
     ser = serial.Serial(COMPORT, BAUDRATE, timeout=SERIAL_TIMEOUT)
+    init_serial(ser, SERIAL_TIMEOUT)
     screencap(ser)
 
 #import pdb;pdb.set_trace()

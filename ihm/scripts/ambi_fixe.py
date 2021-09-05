@@ -4,8 +4,8 @@
 import sys
 import serial
 import configparser
-from funcs import send_data
-
+from funcs import send_data, init_serial
+import time
 
 conffile = configparser.ConfigParser()
 conffile.read('scripts\\config.ini')
@@ -38,6 +38,8 @@ if __name__ == '__main__':
 
         # initilisation du lien série avec l'Arduino
         ser = serial.Serial(COMPORT, BAUDRATE, timeout=SERIAL_TIMEOUT)
+        init_serial(ser, SERIAL_TIMEOUT)
+        
         set_unicolor_leds(N_LEDS, red, green, blue, ser)
     else:
         print('Usage: python ambi_fixe.py <number of leds> <red> <green> <blue> <port COM> <baudrate>')

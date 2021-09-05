@@ -10,7 +10,7 @@ from PyQt5.QtCore import Qt, QProcess
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QLineEdit, QComboBox, \
                             QGridLayout, QPlainTextEdit, QMainWindow, QApplication
 
-BAUDRATES = ['300', '600', '1200', '2400', '4800', '9600', '19200', '38400', '57600', '115200']
+BAUDRATES = ['9600', '19200', '38400', '57600', '115200', '230400']
 
 # TODO : mode cinéma / gestion bandes noires
 # TODO : dans l'IHM un menu dédié pour régler tous les paramètres du fichier de config, qui est utilisé par les scripts
@@ -211,13 +211,13 @@ class AmbilightIHM(QMainWindow):
         
     def handle_stdout(self):
         data = self.p.readAllStandardOutput()
-        stdout = bytes(data).decode('utf-8')
+        stdout = bytes(data).decode()
         self.message(stdout)
 
     def handle_stderr(self):
         data = self.p.readAllStandardError()
         print(data)
-        stderr = bytes(data).decode('utf-8')
+        stderr = bytes(data).decode()
         self.message(stderr)
 
     def handle_state(self, state):

@@ -5,11 +5,16 @@ import numpy as np
 import mss
 import PIL
 import pyautogui
+import time
+
 
 def screen_capture(screen_method, monitor):
     if screen_method == 'mss':
         with mss.mss() as sct: # TODO : peut-être mettre ce with au dessus du while du main pour améliorer fps ?
-            sct_img = sct.grab(sct.monitors[monitor]) # capture en BGRA
+            try:
+                sct_img = sct.grab(sct.monitors[monitor]) # capture en BGRA
+            except: # si un seul écran
+                sct_img = sct.grab({'left': 0, 'top': 0, 'width': 2160, 'height': 1440}) #TODO : récupérer les paramètres de l'écran pour faire ça
         colormode = 'BGR'
     elif screen_method == 'pyautogui':
         #ATTENTION : avec cette méthode on est en RGB, pas en BGR. On ne peut pas choisir l'écran
@@ -121,7 +126,12 @@ def send_data(ser, data):
     #data = "0,230,45,50;1,86,125,53;2,43,200,230;" 
     data = data.encode()
     ser.write(data)
-    
+
+def init_serial(ser, timeout):
+    send_data(ser, "0,0,0,0;!")
+    time.sleep(timeout)
+    send_data(ser, "0,0,0,0;!")
+    time.sleep(timeout)
     
 def visualize_screen_n_leds(screen, led_val_top, led_val_down, led_val_right, led_val_left, led_pos_top_pix, led_pos_down_pix, led_pos_right_pix, led_pos_left_pix, space_between_leds_pix):
     import matplotlib.pyplot as plt

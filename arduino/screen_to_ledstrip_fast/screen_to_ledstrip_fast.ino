@@ -1,8 +1,8 @@
 #include <FastLED.h>
 
-#define N_LEDS 55 // Number of LEDs
+#define N_LEDS 58 // Number of LEDs
 #define BAUD_RATE 115200
-#define PIN 3
+#define PIN 4
 #define PRINTSERIAL 0 // mettre à 1 pour print les infos de LEDs, 0 sinon
 
 // instantiation du tableau de LEDs
@@ -26,17 +26,19 @@ void setup()
 {
  // initilisation du lien série (baud rate et timeout)
  Serial.begin(BAUD_RATE);
- Serial.setTimeout(10); // modifier ça si on veut que ça aille encore plus vite la boucle. Mais attention à la valeur limite (TBD).
+ Serial.setTimeout(40); // modifier ça si on veut que ça aille encore plus vite la boucle. Mais attention à la valeur limite (TBD).
 
  // initialisation de la bande de LEDs
- FastLED.addLeds<WS2812, PIN, RGB>(led_strip, N_LEDS);
+ FastLED.addLeds<WS2812, PIN, GRB>(led_strip, N_LEDS);
 }
 
 void loop(){
 
   // on lit le message reçu jusqu'au délimiteur "!" (TBC : si le message ne contient pas de délimiteur ça marche aussi ?)
-  read_string = Serial.readStringUntil('!');
-
+  String read_string = Serial.readStringUntil('!');
+  if (PRINTSERIAL){
+    Serial.println(read_string);
+  }
   // Message format: LED_ID,R,G,B;LED_ID,R,G,B;LED_ID,R,G,B;...;LED_ID,R,G,B;
   if (read_string.length() > 1) {
     prev_semicolumn_0 = 0;
@@ -62,19 +64,25 @@ void loop(){
       led_strip[ledid] = CRGB(red, green, blue);
 
       if (PRINTSERIAL) {
-        Serial.println(i);
-        Serial.println(ledid);
-        Serial.println(red);
-        Serial.println(green);
-        Serial.println(blue);
-        Serial.println("SPLIT");
+        Serial.print(i);
+        Serial.print(' ');
+        Serial.print(ledid);
+        Serial.print(' ');
+        Serial.print(red);
+        Serial.print(' ');
+        Serial.print(green);
+        Serial.print(' ');
+        Serial.print(blue);
+        Serial.print(' ');
+        Serial.println("SPLIT ");
       }
       
       prev_semicolumn_0 = semicolumn_0;
       i+=1;
     }
-    read_string="";
+    
   }
+  read_string="";
   // Update de toute la bande de LEDs 
   FastLED.show();
 }
