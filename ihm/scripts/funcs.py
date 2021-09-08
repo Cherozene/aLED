@@ -145,22 +145,24 @@ def visualize_screen_n_leds(screen, led_val_top, led_val_down, led_val_right, le
     mat[50:-50, 50:-50, :] = screen
     
     # on remplit les bords avec les valeurs des leds
-    for i in range(len(led_val_top)):
-        ledpos = led_pos_top_pix[i]
-        # top red
-        mat[:50, max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_width+50), 0] = led_val_top[i][0]
-        # top green
-        mat[:50, max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_width+50), 1] = led_val_top[i][1]
-        # top blue
-        mat[:50, max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_width+50), 2] = led_val_top[i][2]
+    for i in range(max(len(led_val_top), len(led_val_down))):
+        if (i < len(led_val_top)):
+            ledpos = led_pos_top_pix[i]
+            # top red
+            mat[:50, max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_width+50), 0] = led_val_top[i][0]
+            # top green
+            mat[:50, max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_width+50), 1] = led_val_top[i][1]
+            # top blue
+            mat[:50, max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_width+50), 2] = led_val_top[i][2]
         
-        # down red
-        mat[-50:, max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_width+50), 0] = led_val_down[i][0]
-        # down green
-        mat[-50:, max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_width+50), 1] = led_val_down[i][1]
-        # down blue
-        mat[-50:, max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_width+50), 2] = led_val_down[i][2]
-        
+        if (i < len(led_val_down)):
+            ledpos = led_pos_down_pix[i]
+            # down red
+            mat[-50:, max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_width+50), 0] = led_val_down[i][0]
+            # down green
+            mat[-50:, max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_width+50), 1] = led_val_down[i][1]
+            # down blue
+            mat[-50:, max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_width+50), 2] = led_val_down[i][2]
         
         if (i < len(led_val_right)): # pour éviter une boucle en plus, on calcule les right et left ici aussi (suppose écran plus large que haut).
             ledpos = led_pos_right_pix[i]
@@ -171,6 +173,8 @@ def visualize_screen_n_leds(screen, led_val_top, led_val_down, led_val_right, le
             # right blue
             mat[max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_height+50), -50:, 2] = led_val_right[i][2]
             
+        if (i < len(led_val_left)):
+            ledpos = led_pos_left_pix[i]
             # left red
             mat[max(ledpos-space_between_leds_pix+50, 50):min(ledpos+space_between_leds_pix,screen_height+50), :50, 0] = led_val_left[i][0]
             # left green
