@@ -42,7 +42,7 @@ if __name__ == '__main__':
         
         set_unicolor_leds(N_LEDS, red, green, blue, ser)
     else:
-        print('Usage: python ambi_fixe.py <number of leds> <red> <green> <blue> <port COM> <baudrate>')
+        print('Usage: python ambi_fixe.py <red> <green> <blue>')
 
 
     

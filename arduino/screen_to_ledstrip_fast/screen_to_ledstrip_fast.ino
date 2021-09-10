@@ -1,6 +1,6 @@
 #include <FastLED.h>
 
-#define N_LEDS 52 // Number of LEDs
+#define N_LEDS 51 // Number of LEDs
 #define BAUD_RATE 115200
 #define PIN 4
 #define PRINTSERIAL 0 // mettre à 1 pour print les infos de LEDs, 0 sinon
@@ -26,7 +26,7 @@ void setup()
 {
  // initilisation du lien série (baud rate et timeout)
  Serial.begin(BAUD_RATE);
- Serial.setTimeout(60); // modifier ça si on veut que ça aille encore plus vite la boucle. Mais attention à la valeur limite (TBD).
+ Serial.setTimeout(100); // modifier ça si on veut que ça aille encore plus vite la boucle. Mais attention à la valeur limite (TBD).
 
  // initialisation de la bande de LEDs
  FastLED.addLeds<WS2812, PIN, GRB>(led_strip, N_LEDS);
@@ -83,7 +83,7 @@ void loop(){
     
   }
   read_string="";
+  //led_strip[0] = CRGB(0,0,0); // TODO : REMOVE !! Je l'ai mis parce que ma première led marche mal.
   // Update de toute la bande de LEDs 
-  led_strip[ledid] = CRGB(0,0,0);
   FastLED.show();
 }

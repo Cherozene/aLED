@@ -73,12 +73,20 @@ def get_led_value(side, cropped_screen, neighborhood, corner):
     mean_chann0 = np.mean(inuse_data[:,:,0])
     mean_chann1 = np.mean(inuse_data[:,:,1])
     mean_chann2 = np.mean(inuse_data[:,:,2])
+
+    # threshold to get full black when mean is very low but not zero
+    if mean_chann0 <= 5:
+        mean_chann0 = 0
+    if mean_chann1 <= 5:
+        mean_chann1 = 0
+    if mean_chann2 <= 5:
+        mean_chann2 = 0
     
     return int(round(mean_chann0)), int(round(mean_chann1)), int(round(mean_chann2))
 
 
 def prep_data(led_val_top, led_val_down, led_val_right, led_val_left, first_led='bl', order='clockwise'):
-    # les LED_ID doivent être dans l'ordre attendu par le led strip... TBD. 
+    # les LED_ID doivent être dans l'ordre attendu par le led strip... 
     # => first_led = tl, tr, bl ou br (top left, top right, bot left, bot right)
     # => order = clockwise ou counterclockwise
     

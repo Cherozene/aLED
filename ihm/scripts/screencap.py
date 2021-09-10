@@ -145,7 +145,7 @@ def screencap(ser):
                 led_val_left.append(get_led_value('left', cropped_screen_left, NEIGHBORHOOD_LEFT, corner))
 
         ### pour visualiser l'écran avec les couleurs des leds autour
-        #Nvisualize_screen_n_leds(screen, led_val_top, led_val_down, led_val_right, led_val_left, led_pos_top_pix, led_pos_down_pix, led_pos_right_pix, led_pos_left_pix, space_between_leds_pix)
+        #visualize_screen_n_leds(screen, led_val_top, led_val_down, led_val_right, led_val_left, led_pos_top_pix, led_pos_down_pix, led_pos_right_pix, led_pos_left_pix, space_between_leds_pix)
         
         ### à partir des tableaux led_val_ZZZZ crée le bon string data
         data = prep_data(led_val_top, led_val_down, led_val_right, led_val_left, first_led=ORDER_START, order=ORDER_WAY)

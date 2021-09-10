@@ -93,18 +93,31 @@ class AmbilightIHM(QMainWindow):
         self.button_off.setStyleSheet("background-color: grey;")
         self.button_off.clicked.connect(self.push_button_off)
 
-        self.button_screenlight = QPushButton("Mode suivi d'écran", self)
+        self.button_screenlight = QPushButton("Suivi d'écran", self)
         self.button_screenlight.setStyleSheet("background-color: grey;")
         self.button_screenlight.clicked.connect(self.push_button_screenlight)
 
-        self.button_cinema = QPushButton("Mode suivi d'écran cinéma", self)
-        self.button_cinema.setStyleSheet("background-color: grey;")
-        self.button_cinema.clicked.connect(self.push_button_cinema)
-
-        self.button_ambilight = QPushButton("Mode couleur fixe", self)
+        self.button_ambilight = QPushButton("Couleur unie et fixe", self)
         self.button_ambilight.setStyleSheet("background-color: grey;")
         self.button_ambilight.clicked.connect(self.push_button_ambilight)
 
+        self.button_timer = QPushButton("Minuteur", self)
+        self.button_timer.setStyleSheet("background-color: grey;")
+        self.button_timer.clicked.connect(self.push_button_timer)
+
+        # minuteur widgets
+        self.timerLabel = QLabel("Réglage du minuteur (minutes et secondes)")
+        self.timerLabel.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.timerLabel.setStyleSheet("color: white;")
+
+        self.minutesbox = QLineEdit(self)
+        self.minutesbox.setText('minutes')
+        self.minutesbox.setStyleSheet("color: white;")
+        self.minutesbox.setMaxLength(3)
+        self.secondsbox = QLineEdit(self)
+        self.secondsbox.setText('secondes')
+        self.secondsbox.setStyleSheet("color: white;")
+        self.secondsbox.setMaxLength(3)
 
         # info text widget
         self.infoLabel = QLabel("Info :")
@@ -133,11 +146,15 @@ class AmbilightIHM(QMainWindow):
 
         layout.addWidget(self.button_off, 7, 0, 1, 3)
         layout.addWidget(self.button_screenlight, 8, 0, 1, 3)
-        layout.addWidget(self.button_cinema, 9, 0, 1, 3)
-        layout.addWidget(self.button_ambilight, 10, 0, 1, 3)
+        layout.addWidget(self.button_ambilight, 9, 0, 1, 3)
 
-        layout.addWidget(self.infoLabel, 11, 0)
-        layout.addWidget(self.text, 12, 0, 1, 3)
+        layout.addWidget(self.timerLabel, 10, 0, 1, 3)
+        layout.addWidget(self.minutesbox, 11, 0)
+        layout.addWidget(self.secondsbox, 11, 1)
+        layout.addWidget(self.button_timer, 12, 0, 1, 3)
+
+        layout.addWidget(self.infoLabel, 13, 0)
+        layout.addWidget(self.text, 14, 0, 1, 3)
         self.centralWidget.setLayout(layout)
 
 
@@ -154,13 +171,6 @@ class AmbilightIHM(QMainWindow):
         self.modeLabel.setText(f"Mode actuel : {self.mode}")
         self.p.start("python", ["scripts\\screencap.py"])
         self.message("Ambilight dynamique (mode full écran)")
-
-    def push_button_cinema(self):
-        self.reset_process() # pour tuer le process en cours si besoin
-        self.mode = 'cinema'
-        self.modeLabel.setText(f"Mode actuel : {self.mode}")
-        # TODO : idem à la fonction screencap, mais en changeant les macros pour ne pas traiter les bandes noires
-        self.message("[EN CHANTIER] Ambilight dynamique (mode cinéma)")
 
     def push_button_ambilight(self):
         self.reset_process() # pour tuer le process en cours si besoin
@@ -180,6 +190,26 @@ class AmbilightIHM(QMainWindow):
             self.modeLabel.setText(f"Mode actuel : {self.mode}")
             self.p.start("python", ["scripts\\ambi_fixe.py", str(red), str(green), str(blue)])
             self.message("Ambilight couleur fixe {}, {}, {}".format(red, green, blue))
+
+    def push_button_timer(self):
+        self.reset_process() # pour tuer le process en cours si besoin
+
+        try:
+            minutes = int(self.minutesbox.text())
+            seconds = int(self.secondsbox.text())
+        except:
+            self.message("[ERREUR] Les minutes et secondes doivent être des entiers.")
+            return
+
+        if (minutes < 0) or (seconds < 0 or seconds > 59):
+            self.message("[ERREUR] Les minutes doivent être positives. Les secondes de 0 à 59. Valeurs entières.")
+        else:
+            self.mode = 'minuteur'
+            self.modeLabel.setText(f"Mode actuel : {self.mode}")
+            import time
+            print(time.time())
+            self.p.start("python", ["scripts\\timer.py", str(60*minutes+seconds)])
+            self.message("Minuteur démarré pour {} minute(s) et {} seconde(s).".format(minutes, seconds))
 
     def reset_process(self):
         if self.p is not None:
