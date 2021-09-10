@@ -1,6 +1,8 @@
 # LED's go
 ## Control leds behind your screen with a simple USB-plugged Arduino Nano 
 
+Video: https://www.youtube.com/watch?v=ITaTlD44Gg0
+
 ## Hardware Installation
 _Coming ~~soon~~_
 
