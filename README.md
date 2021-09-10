@@ -1,5 +1,5 @@
 # LED's go
-## Control leds behind you screen with a simple USB-plugged Arduino Nano 
+## Control leds behind your screen with a simple USB-plugged Arduino Nano 
 
 ## Hardware Installation
 _Coming ~~soon~~_
