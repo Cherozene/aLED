@@ -27,7 +27,6 @@ SCREEN_WIDTH_CM = float(conffile['ECRAN']['LargeurEcran'])
 SCREEN_HEIGHT_CM = float(conffile['ECRAN']['HauteurEcran'])
 
 #position des leds en cm
-#TODO : VALEURS A RENTRER A LA MAIN QUAND LES STRIPS SERONT COLLES A L'ECRAN
 LED_POSITION_TOP =  eval(conffile['LEDS']['PositionLedsHaut'])
 LED_POSITION_DOWN = eval(conffile['LEDS']['PositionLedsBas'])
 LED_POSITION_RIGHT = eval(conffile['LEDS']['PositionLedsDroite'])
@@ -43,9 +42,6 @@ ORDER_WAY = conffile['LEDS']['SensParcoursLEDs']
 #nombre de pixels à prendre autour de la LED [leftright, updown] - dans les deux directions quand c'est possible
 # exemple pour TOP : [100, 100] = carré de 200x100 (width, height) autour de la led - sauf effet de coin
 # exemple pour LEFT : [100, 100] = carré de 100x200 (width, height) autour de la led - sauf effet de coin
-##TODO : mode cinéma, qui ne considère pas les bandes noires en haut et en bas de l'écran
-##TODO : pour gérer le mode "cinéma" une possibilité est de changer les valeurs ici. 
-##TODO : idéalement il faudrait mettre un offset pour ne pas du tout considérer les bandes noires (à faire au niveau de cropped_screen_top et down)
 NEIGHBORHOOD_TOP = eval(conffile['SCREENSHOT']['VoisinageHaut'])
 NEIGHBORHOOD_DOWN = eval(conffile['SCREENSHOT']['VoisinageBas'])
 NEIGHBORHOOD_RIGHT = eval(conffile['SCREENSHOT']['VoisinageDroite'])
@@ -86,13 +82,11 @@ def screencap(ser):
         # led_val_down va du coin bas gauche au coin bas droite
         # led_val_right va du coin haut droite au coin bas droite
         # led_val_left va du coin haut gauche au coin bas gauche
-        # TODO : voir s'il ne faut pas initialiser ces listes à la bonne taille avec des 0
-        # TODO : dans ce cas il faudra remplacer les append présents plus loin
         led_val_top = []
         led_val_down = []
         led_val_right = []
         led_val_left = []
-        # TODO vérifier pour les 2 lignes qui suivent qu'on a les mêmes positions top/down et right/left
+    
         n_leds_top = len(led_pos_top_pix)
         n_leds_down = len(led_pos_down_pix)
         n_leds_right = len(led_pos_right_pix)
@@ -149,8 +143,7 @@ def screencap(ser):
         
         ### à partir des tableaux led_val_ZZZZ crée le bon string data
         data = prep_data(led_val_top, led_val_down, led_val_right, led_val_left, first_led=ORDER_START, order=ORDER_WAY)
-        #print(data)
-        #print()
+
         ### on envoie le string "data" au format LED_ID,R,G,B;LED_ID,R,G,B;LED_ID,R,G,B;...;LED_ID,R,G,B;
         send_data(ser, data)     
         

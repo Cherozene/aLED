@@ -5,7 +5,7 @@ import sys
 import serial
 import configparser
 from funcs import send_data, init_serial
-import time
+#import time
 
 conffile = configparser.ConfigParser()
 conffile.read('scripts\\config.ini')

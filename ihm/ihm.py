@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+from os import remove
 from shutil import copyfile
 import configparser
 import serial.tools.list_ports
@@ -12,7 +13,6 @@ from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QLineEdit, QComboBox, 
 
 BAUDRATES = ['9600', '19200', '38400', '57600', '115200', '230400']
 
-# TODO : mode cinéma / gestion bandes noires
 # TODO : dans l'IHM un menu dédié pour régler tous les paramètres du fichier de config, qui est utilisé par les scripts
 
 # on recopie le fichier de config par défaut ; l'IHM travaille sur cette copie locale
@@ -265,6 +265,7 @@ win = AmbilightIHM()
 win.show()
 app.exec()
 
-# TODO : effacer le fichier de config temporaire
+#remove temporary config file
+remove('scripts\\config.ini')
 
 print('Closing')
