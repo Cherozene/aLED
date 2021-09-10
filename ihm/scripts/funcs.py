@@ -8,13 +8,12 @@ import pyautogui
 import time
 
 
-def screen_capture(screen_method, monitor):
+def screen_capture(screen_method, monitor, sct):
     if screen_method == 'mss':
-        with mss.mss() as sct: # TODO : peut-être mettre ce with au dessus du while du main pour améliorer fps ?
-            try:
-                sct_img = sct.grab(sct.monitors[monitor]) # capture en BGRA
-            except: # si un seul écran
-                sct_img = sct.grab({'left': 0, 'top': 0, 'width': 2160, 'height': 1440}) #TODO : récupérer les paramètres de l'écran pour faire ça
+        try:
+            sct_img = sct.grab(sct.monitors[monitor]) # capture en BGRA
+        except: # si un seul écran
+            sct_img = sct.grab({'left': 0, 'top': 0, 'width': 2160, 'height': 1440}) #TODO : récupérer les paramètres de l'écran pour faire ça
         colormode = 'BGR'
     elif screen_method == 'pyautogui':
         #ATTENTION : avec cette méthode on est en RGB, pas en BGR. On ne peut pas choisir l'écran
