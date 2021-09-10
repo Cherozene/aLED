@@ -15,7 +15,7 @@ Install the Python libs listed in _requirements.txt_ file.
 pip install -r requirements.txt
 ```
 
-Run the .exe by double-clicking the _ihm/ihm.exe_. Should work ¯\_(ツ)_/¯
+Run the .exe by double-clicking the _ihm/LEDs Control Center.exe_. Should work ¯\_(ツ)_/¯
 
 ### _Set up the Arduino Nano - USB Plugged_
 Open _arduino/screen\_to\_ledstrip\_fast/screen\_to\_ledstrip\_fast.ino_ with Arduino IDE (https://www.arduino.cc/en/software).

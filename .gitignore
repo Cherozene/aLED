@@ -4,5 +4,5 @@ __pycache__/
 */dist
 */build
 *.spec
-scripts/config.ini
+ihm/scripts/config.ini
 *my_notes.txt*
