@@ -18,10 +18,10 @@ BAUDRATES = ['9600', '19200', '38400', '57600', '115200', '230400']
 # on recopie le fichier de config par défaut ; l'IHM travaille sur cette copie locale
 copyfile('scripts\\default_config.ini', 'scripts\\config.ini')
 
-class AmbilightIHM(QMainWindow):
+class LedCC(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.mode = 'off' # 0 : off, 1 : screenlight, 2 : cinéma, 3 : ambilight
+        self.mode = 'off' # off, screenlight, unicolor, minuteur
         self.p = None # plus tard utilisé pour le process
         self.avail_comports = [port.name+' '+port.description for port in serial.tools.list_ports.comports()]
         
@@ -29,15 +29,15 @@ class AmbilightIHM(QMainWindow):
 
 
     def setupUi(self):
-        self.setWindowTitle("Ambilight IHM")
+        self.setWindowTitle("LEDs Control Center")
         self.setStyleSheet("background-color: black;")
-        self.resize(400, 500)
+        self.resize(400, 400)
         self.centralWidget = QWidget()
         self.setCentralWidget(self.centralWidget)
 
 
         # title widget
-        self.titleLabel = QLabel("Screen Ambilight Control")
+        self.titleLabel = QLabel("LEDs Control Center")
         self.titleLabel.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         self.titleLabel.setStyleSheet("color: white; font: 24pt;")
 
@@ -97,9 +97,9 @@ class AmbilightIHM(QMainWindow):
         self.button_screenlight.setStyleSheet("background-color: grey;")
         self.button_screenlight.clicked.connect(self.push_button_screenlight)
 
-        self.button_ambilight = QPushButton("Couleur unie et fixe", self)
-        self.button_ambilight.setStyleSheet("background-color: grey;")
-        self.button_ambilight.clicked.connect(self.push_button_ambilight)
+        self.button_unicolor = QPushButton("Couleur unie et fixe", self)
+        self.button_unicolor.setStyleSheet("background-color: grey;")
+        self.button_unicolor.clicked.connect(self.push_button_unicolor)
 
         self.button_timer = QPushButton("Minuteur", self)
         self.button_timer.setStyleSheet("background-color: grey;")
@@ -122,7 +122,7 @@ class AmbilightIHM(QMainWindow):
         # info text widget
         self.infoLabel = QLabel("Info :")
         self.infoLabel.setStyleSheet("color: white;")
-        self.text = QPlainTextEdit()
+        self.text = QLineEdit()
         self.text.setStyleSheet("color: white;")
         self.text.setReadOnly(True)
 
@@ -146,7 +146,7 @@ class AmbilightIHM(QMainWindow):
 
         layout.addWidget(self.button_off, 7, 0, 1, 3)
         layout.addWidget(self.button_screenlight, 8, 0, 1, 3)
-        layout.addWidget(self.button_ambilight, 9, 0, 1, 3)
+        layout.addWidget(self.button_unicolor, 9, 0, 1, 3)
 
         layout.addWidget(self.timerLabel, 10, 0, 1, 3)
         layout.addWidget(self.minutesbox, 11, 0)
@@ -170,9 +170,9 @@ class AmbilightIHM(QMainWindow):
         self.mode = 'screenlight'
         self.modeLabel.setText(f"Mode actuel : {self.mode}")
         self.p.start("python", ["scripts\\screencap.py"])
-        self.message("Ambilight dynamique (mode full écran)")
+        self.message("Suivi d'écran")
 
-    def push_button_ambilight(self):
+    def push_button_unicolor(self):
         self.reset_process() # pour tuer le process en cours si besoin
 
         try:
@@ -186,10 +186,10 @@ class AmbilightIHM(QMainWindow):
         if (red < 0 or red > 255) or (green < 0 or green > 255) or (blue < 0 or blue > 255):
             self.message("[ERREUR] Les couleurs doivent être des nombres entre 0 et 255.")
         else:
-            self.mode = 'ambilight'
+            self.mode = 'unicolor'
             self.modeLabel.setText(f"Mode actuel : {self.mode}")
             self.p.start("python", ["scripts\\ambi_fixe.py", str(red), str(green), str(blue)])
-            self.message("Ambilight couleur fixe {}, {}, {}".format(red, green, blue))
+            self.message("Couleur unie et fixe {}, {}, {}".format(red, green, blue))
 
     def push_button_timer(self):
         self.reset_process() # pour tuer le process en cours si besoin
@@ -237,7 +237,7 @@ class AmbilightIHM(QMainWindow):
         self.message("Baudrate set to: {}".format(s))
 
     def message(self, s):
-        self.text.appendPlainText(s)
+        self.text.setText(s)
         
     def handle_stdout(self):
         data = self.p.readAllStandardOutput()
@@ -257,11 +257,11 @@ class AmbilightIHM(QMainWindow):
             QProcess.Running: 'Running',
         }
         state_name = states[state]
-        self.message("State changed: {}".format(state_name))
+        #self.message("State changed: {}".format(state_name))
 
 
 app = QApplication(sys.argv)
-win = AmbilightIHM()
+win = LedCC()
 win.show()
 app.exec()
 
