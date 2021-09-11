@@ -28,6 +28,13 @@ pip install -r requirements.txt
 
 Run the .exe by double-clicking the _ihm/LEDs Control Center.exe_. Should work ¯\\_(ツ)_/¯
 
+If you want to re-build the .exe (useful only if you modified the ihm.py), run the following:
+```sh
+pyinstaller.exe --onefile --windowed --icon misc\\icon.ico --name 'LEDs Control Center' ihm.py
+```
+(maybe the full path for pyinstaller.exe will be needed)
+If you modify a Python script under the [scripts](ihm/scripts) folder, there is no need to re-build since the .exe calls these Python scripts avec Python.
+
 ![What the app looks like](ihm/misc/ihm_image.png)
 
 **Purple** area is where you choose the RGB values for the unicolor mode.
