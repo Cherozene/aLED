@@ -68,7 +68,7 @@ Last text box (_Info_) displays some short - useless - info when clicking button
 
 
 
-### _Set up the Arduino Nano - USB Plugged_
+### 3. _Set up the Arduino Nano - USB Plugged_
 Open the [Arduino code](arduino/screen\_to\_ledstrip\_fast/screen\_to\_ledstrip\_fast.ino) with Arduino IDE (https://www.arduino.cc/en/software).
 Download FastLED Arduino's library (go through this tuto and search for FastLED in the library manager: https://www.arduino.cc/en/guide/libraries)
 
