@@ -1,10 +1,11 @@
 # LED's go
-## Control leds behind your screen with a simple USB-plugged Arduino Nano 
+## Control LEDs behind your screen with a simple USB-plugged Arduino Nano 
 
 Video: https://www.youtube.com/watch?v=ITaTlD44Gg0
 
 ## Hardware Installation
 _Images to come..._
+
 Hardware needed:
 - Any WS2812b LED strip (and its power supply)
 - One Arduino (Nano works fine)
@@ -25,16 +26,24 @@ Install the Python libs listed in _requirements.txt_ file.
 pip install -r requirements.txt
 ```
 
-Run the .exe by double-clicking the _ihm/LEDs Control Center.exe_. Should work ¯\_(ツ)_/¯
+Run the .exe by double-clicking the _ihm/LEDs Control Center.exe_. Should work ¯\\_(ツ)_/¯
 
 ![What the app looks like](ihm/misc/ihm_image.png)
+
 **Purple** area is where you choose the RGB values for the unicolor mode.
+
 **Yellow** area is where you can change COM port and baudrate. It should not be of great use once set in the [config file](ihm/scripts/default\_config.ini).
+
 **Green** area are the buttons to use to change the lightning mode:
-    - **Eteindre les lumières** sets all LEDs to black (= off).
-    - **Suivi d'écran** is the dynamic lightning which set LEDs to screen colors.
-    - **Couleur unie et fixe** sets all LEDs to the color defined in the **Purple** area.
+
+- _Eteindre les lumières_ sets all LEDs to black (= off).
+
+- _Suivi d'écran_ is the dynamic lightning which set LEDs to screen colors.
+
+- _Couleur unie et fixe_ sets all LEDs to the color defined in the **Purple** area.
+
 **Red** area is where you set and start the timer mode. First box is for minutes. Second box is for seconds. Then click the _Minuteur_ button to start the timer.
+
 Last text box (_Info_) displays some short - useless - info when clicking buttons.
 
 ### 2. _Configure the [config file](ihm/scripts/default\_config.ini)_
