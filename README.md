@@ -4,10 +4,18 @@
 Video: https://www.youtube.com/watch?v=ITaTlD44Gg0
 
 ## Hardware Installation
-_Coming ~~soon~~_
+_Images to come..._
+Hardware needed:
+- Any WS2812b LED strip (and its power supply)
+- One Arduino (Nano works fine)
+
+Installation steps:
+1. Plug the Arduino Nano to your computer (host PC) with USB.
+2. Plug the Arduino ground PIN to the negative PIN of the powersupply (or to the ground of the LED strip).
+3. Plug the Arduino data PIN (default is PIN D4) to the data PIN (middle one) of the WS2812b LED strip.
 
 ## Software Installation
-### _Set up the controller on host PC_
+### 1. _Set up the controller on host PC_
 Project is made for Windows 10 with Python 3.9.7.
 (See this tutorial to get Python for Windows 10: https://docs.microsoft.com/en-us/windows/python/beginners)
 
@@ -19,8 +27,40 @@ pip install -r requirements.txt
 
 Run the .exe by double-clicking the _ihm/LEDs Control Center.exe_. Should work ¯\_(ツ)_/¯
 
+![What the app looks like](ihm/misc/ihm_image.png)
+**Purple** area is where you choose the RGB values for the unicolor mode.
+**Yellow** area is where you can change COM port and baudrate. It should not be of great use once set in the [config file](ihm/scripts/default\_config.ini).
+**Green** area are the buttons to use to change the lightning mode:
+    - **Eteindre les lumières** sets all LEDs to black (= off).
+    - **Suivi d'écran** is the dynamic lightning which set LEDs to screen colors.
+    - **Couleur unie et fixe** sets all LEDs to the color defined in the **Purple** area.
+**Red** area is where you set and start the timer mode. First box is for minutes. Second box is for seconds. Then click the _Minuteur_ button to start the timer.
+Last text box (_Info_) displays some short - useless - info when clicking buttons.
+
+### 2. _Configure the [config file](ihm/scripts/default\_config.ini)_
+1. Choose what monitor will be used for the dynamic lightning effect. ([ECRAN] **Monitor**)
+2. Set the width ([ECRAN] **LargeurEcran**) and the height ([ECRAN] **HauteurEcran**) of your screen in centimeters (edges NOT included).
+3. Measure the positions of your LEDs with respect to the screen for each side (top, bottom, left, right), in centimeters. Note that the total number of LEDs here should match the N\_LEDS macro in the [Arduino code](arduino/screen\_to\_ledstrip\_fast/screen\_to\_ledstrip\_fast.ino).
+    - **PositionLedsHaut** is for **top** side LEDs, from **left to right**. Each number is a LED distance to **top-left** corner.
+    - **PositionLedsBas** is for **bottom** side LEDs, from **left to right**. Each number is a LED distance to **bottom-left** corner.
+    - **PositionLedsGauche** is for **left** side LEDs, from **top to bottom**. Each number is a LED distance to **top-left** corner.
+    - **PositionLedsDroite** is for **right** side LEDs, from **top to bottom**. Each number is a LED distance to **top-right** corner.
+4. Set the starting corner (where power and Arduino are plugged to the strip) ([LEDS] **CoinDebutLeds**)
+5. Set the strip direction (clockwise or counterclockwise), when you look at your screen and the LEDs are behind the screen. ([LEDS] **SensParcoursLEDs**)
+6. [LIEN_SERIE] defines serial communication settings. It can be configured later in the app, except the **SerialTimeout**. Nevertheless, **Baudrate** is not expected to be changed. If the Arduino COM Port is always the same, you can set it there (**COMPort**).
+7. You could change the lib used to screenshot the screen in dynamic lightning mode. MSS is the faster. Other options will probably be removed. Leave **MethodeScreenshot** to _mss_.
+8. Finally you can change the pixels neighborhood used to compute each LED value in dynamic lightning mode.
+    - **VoisinageHaut** is the neighborhood for top LEDs. **VoisinageBas** is for bottom LEDs.
+        - [x,y] : x is the left/right neighborhood and y is the top/down one.
+        - For example: [100,500] for VoisinageHaut, will use a 200x500 pixel rectangle.
+    - **VoisinageGauche** is the neighborhood for left LEDs. **VoisinageDroite** is for right LEDs.
+        - [x,y] : x is the left/right neighborhood and y is the top/down one.
+        - For example: [100,500] for VoisinageGauche, will use a 100x1000 pixel rectangle.
+
+
+
 ### _Set up the Arduino Nano - USB Plugged_
-Open _arduino/screen\_to\_ledstrip\_fast/screen\_to\_ledstrip\_fast.ino_ with Arduino IDE (https://www.arduino.cc/en/software).
+Open the [Arduino code](arduino/screen\_to\_ledstrip\_fast/screen\_to\_ledstrip\_fast.ino) with Arduino IDE (https://www.arduino.cc/en/software).
 Download FastLED Arduino's library (go through this tuto and search for FastLED in the library manager: https://www.arduino.cc/en/guide/libraries)
 
 Change the macros if needed (N\_LEDS and PIN). 

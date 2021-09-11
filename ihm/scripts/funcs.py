@@ -129,8 +129,6 @@ def prep_data(led_val_top, led_val_down, led_val_right, led_val_left, first_led=
    
     
 def send_data(ser, data):
-    #décommenter ligne ci-dessous pour exemple 3 leds, pour tester cette fonction et le code de décodage arduino
-    #data = "0,230,45,50;1,86,125,53;2,43,200,230;" 
     data = data.encode()
     ser.write(data)
 
