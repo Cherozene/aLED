@@ -87,4 +87,7 @@ PIN is the pinout of the Arduino, plugged into the LEDs strip control pin.
 Compile and download the code to the Arduino.
 Arduino has to remain USB-plugged to the computer in order to receive messages from the control center.
 
+# Info and links
 
+[FastLED](https://github.com/FastLED/FastLED) (Arduino library) GitHub.
+[Icon](ihm/misc/icon.ico) under GNU General Public License.
