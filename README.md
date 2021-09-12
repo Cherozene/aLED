@@ -63,9 +63,10 @@ Last text box (_Info_) displays some short - useless - info when clicking button
     - **PositionLedsDroite** is for **right** side LEDs, from **top to bottom**. Each number is a LED distance to **top-right** corner.
 4. Set the starting corner (where power and Arduino are plugged to the strip) ([LEDS] **CoinDebutLeds**)
 5. Set the strip direction (clockwise or counterclockwise), when you look at your screen and the LEDs are behind the screen. ([LEDS] **SensParcoursLEDs**)
-6. [LIEN_SERIE] defines serial communication settings. It can be configured later in the app, except the **SerialTimeout**. Nevertheless, **Baudrate** is not expected to be changed. If the Arduino COM Port is always the same, you can set it there (**COMPort**).
-7. You could change the lib used to screenshot the screen in dynamic lightning mode. MSS is the faster. Other options will probably be removed. Leave **MethodeScreenshot** to _mss_.
-8. Finally you can change the pixels neighborhood used to compute each LED value in dynamic lightning mode.
+6. [LEDS] **Luminosity** should be left at 100% by default. This parameter is set within the app.
+7. [LIEN_SERIE] defines serial communication settings. It can be configured later within the app, except the **SerialTimeout**. Nevertheless, **Baudrate** is not expected to be changed. If the Arduino COM Port is always the same, you can set it there (**COMPort**).
+8. You could change the lib used to screenshot the screen in dynamic lightning mode. MSS is the faster. Other options will probably be removed. Leave **MethodeScreenshot** to _mss_.
+9. Finally you can change the pixels neighborhood used to compute each LED value in dynamic lightning mode.
     - **VoisinageHaut** is the neighborhood for top LEDs. **VoisinageBas** is for bottom LEDs.
         - [x,y] : x is the left/right neighborhood and y is the top/down one.
         - For example: [100,500] for VoisinageHaut, will use a 200x500 pixel rectangle.

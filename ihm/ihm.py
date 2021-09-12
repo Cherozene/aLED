@@ -8,8 +8,8 @@ import configparser
 import serial.tools.list_ports
 
 from PyQt5.QtCore import Qt, QProcess
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton, QLineEdit, QComboBox, \
-                            QGridLayout, QPlainTextEdit, QMainWindow, QApplication
+from PyQt5.QtWidgets import QSlider, QWidget, QLabel, QPushButton, QLineEdit, QComboBox, \
+                            QGridLayout, QMainWindow, QApplication
 
 BAUDRATES = ['9600', '19200', '38400', '57600', '115200', '230400']
 
@@ -87,6 +87,18 @@ class LedCC(QMainWindow):
         self.menu_baudrates.addItems(BAUDRATES)
         self.menu_baudrates.currentTextChanged.connect(self.update_baudrate)
 
+        # luminosity slider
+        self.lum_label = QLabel("Luminosité pour mode fixe", self)
+        self.lum_label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.lum_label.setStyleSheet("color: white;")
+
+        self.lum_slider = QSlider(Qt.Horizontal, self)
+        self.lum_slider.setGeometry(30, 40, 200, 30)
+        self.lum_slider.setRange(0, 100)
+        self.lum_slider.setValue(100)
+        self.lum_slider.setTickPosition(QSlider.TicksBelow)
+        self.lum_slider.setTickInterval(10)
+        self.lum_slider.valueChanged[int].connect(self.luminosity_update)
 
         # buttons widgets
         self.button_off = QPushButton("Eteindre les lumières", self)
@@ -142,19 +154,22 @@ class LedCC(QMainWindow):
         layout.addWidget(self.baudrateLabel, 3, 1)
         layout.addWidget(self.menu_baudrates, 4, 1)
 
-        layout.addWidget(self.modeLabel, 5, 0, 1, 3)
+        layout.addWidget(self.lum_label, 5, 0, 1, 3)
+        layout.addWidget(self.lum_slider, 6, 0, 1, 3)
 
-        layout.addWidget(self.button_off, 7, 0, 1, 3)
-        layout.addWidget(self.button_screenlight, 8, 0, 1, 3)
-        layout.addWidget(self.button_unicolor, 9, 0, 1, 3)
+        layout.addWidget(self.modeLabel, 7, 0, 1, 3)
 
-        layout.addWidget(self.timerLabel, 10, 0, 1, 3)
-        layout.addWidget(self.minutesbox, 11, 0)
-        layout.addWidget(self.secondsbox, 11, 1)
-        layout.addWidget(self.button_timer, 12, 0, 1, 3)
+        layout.addWidget(self.button_off, 9, 0, 1, 3)
+        layout.addWidget(self.button_screenlight, 10, 0, 1, 3)
+        layout.addWidget(self.button_unicolor, 11, 0, 1, 3)
 
-        layout.addWidget(self.infoLabel, 13, 0)
-        layout.addWidget(self.text, 14, 0, 1, 3)
+        layout.addWidget(self.timerLabel, 12, 0, 1, 3)
+        layout.addWidget(self.minutesbox, 13, 0)
+        layout.addWidget(self.secondsbox, 13, 1)
+        layout.addWidget(self.button_timer, 14, 0, 1, 3)
+
+        layout.addWidget(self.infoLabel, 15, 0)
+        layout.addWidget(self.text, 16, 0, 1, 3)
         self.centralWidget.setLayout(layout)
 
 
@@ -235,6 +250,14 @@ class LedCC(QMainWindow):
         with open('scripts\\config.ini', 'w') as filename:
             conffile.write(filename)
         self.message("Baudrate set to: {}".format(s))
+
+    def luminosity_update(self, lum):
+        conffile = configparser.ConfigParser()
+        conffile.read('scripts\\config.ini')
+        conffile['LEDS']['Luminosity'] = str(lum)
+        with open('scripts\\config.ini', 'w') as filename:
+            conffile.write(filename)
+        self.message("Luminosity set to: {}%".format(lum))
 
     def message(self, s):
         self.text.setText(s)

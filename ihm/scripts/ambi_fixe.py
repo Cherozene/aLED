@@ -21,11 +21,12 @@ LED_POSITION_RIGHT = eval(conffile['LEDS']['PositionLedsDroite'])
 LED_POSITION_LEFT = eval(conffile['LEDS']['PositionLedsGauche'])
 N_LEDS = len(LED_POSITION_TOP) + len(LED_POSITION_DOWN) + len(LED_POSITION_RIGHT) + len(LED_POSITION_LEFT)
 #print(N_LEDS)
+LUMINOSITY = int(conffile['LEDS']['Luminosity'])/100
 
 def set_unicolor_leds(n_leds, r, g, b, ser):
     data = ''
     for i in range(n_leds):
-        data += '{},{},{},{};'.format(i, r, g, b)
+        data += '{},{},{},{};'.format(i, r*LUMINOSITY, g*LUMINOSITY, b*LUMINOSITY)
     data += '!' # délimiteur pour Arduino
     #print(data)
     send_data(ser, data) 
