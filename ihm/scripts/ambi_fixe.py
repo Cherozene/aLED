@@ -26,7 +26,7 @@ LUMINOSITY = int(conffile['LEDS']['Luminosity'])/100
 def set_unicolor_leds(n_leds, r, g, b, ser):
     data = ''
     for i in range(n_leds):
-        data += '{},{},{},{};'.format(i, r*LUMINOSITY, g*LUMINOSITY, b*LUMINOSITY)
+        data += '{},{},{},{};'.format(i, int(r*LUMINOSITY), int(g*LUMINOSITY), int(b*LUMINOSITY))
     data += '!' # délimiteur pour Arduino
     #print(data)
     send_data(ser, data) 
