@@ -32,10 +32,13 @@ def run_timer(n_leds, duration, ser):
     for i in range(len(colors_lines)):
         process_start_time = time.time() #utilisé pour connaitre le temps d'envoi des données et le soustraire au timer
         r, g, b = colors_lines[i].split()
-        data = ''
-        for i in range(n_leds):
-            data += '{},{},{},{};'.format(i, r, g, b)
-        data += '!' # délimiteur pour Arduino
+        data = bytearray()
+        data.append(1) # start byte
+        for j in range(n_leds):
+            data.append(int(r))
+            data.append(int(g))
+            data.append(int(b))
+        data.append(2) # end byte
         send_data(ser, data) 
         process_end_time = time.time() #utilisé pour connaitre le temps d'envoi des données et le soustraire au timer
         
@@ -44,16 +47,24 @@ def run_timer(n_leds, duration, ser):
 
     # Quand le timer est terminé, on fait clignoter en rouge !
     while True:
-        data = ''
+        ## OFF
+        data = bytearray()
+        data.append(1) # start byte
         for i in range(n_leds):
-            data += '{},0,0,0;'.format(i)
-        data += '!' # délimiteur pour Arduino
+            for j in range(3):
+                data.append(0)
+        data.append(2) # end byte
         send_data(ser, data) 
         time.sleep(0.2)
-        data = ''
+
+        ## CLIGNOTE
+        data = bytearray()
+        data.append(1) # start byte
         for i in range(n_leds):
-            data += '{},255,0,0;'.format(i)
-        data += '!' # délimiteur pour Arduino
+            data.append(255) # ICI ROUGE
+            for j in range(2):
+                data.append(0)
+        data.append(2) # end byte
         send_data(ser, data) 
         time.sleep(0.5)
 
@@ -63,7 +74,7 @@ if __name__ == '__main__':
 
         # initilisation du lien série avec l'Arduino
         ser = serial.Serial(COMPORT, BAUDRATE, timeout=SERIAL_TIMEOUT)
-        init_serial(ser, SERIAL_TIMEOUT)
+        init_serial(ser, SERIAL_TIMEOUT, N_LEDS)
         
         run_timer(N_LEDS, duration, ser)
     else:
