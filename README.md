@@ -2,7 +2,9 @@
 ## Control LEDs behind your screen with a simple USB-plugged Arduino Nano 
 
 Video: https://www.youtube.com/watch?v=VN7Q4Q9-Hpg
-(old version before sending binary data to Arduino) https://www.youtube.com/watch?v=ITaTlD44Gg0
+
+(old version before sending binary data to Arduino: https://www.youtube.com/watch?v=ITaTlD44Gg0)
+
 Current version reaches ~14 fps. Previous one reached ~5 fps.
 
 ## Hardware Installation
