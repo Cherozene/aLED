@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import mss
 import PIL
 import pyautogui
 import time
@@ -84,7 +83,7 @@ def get_led_value(side, cropped_screen, neighborhood, corner):
     return int(round(mean_chann0)), int(round(mean_chann1)), int(round(mean_chann2))
 
 
-def prep_data(led_val_top, led_val_down, led_val_right, led_val_left, first_led='bl', order='clockwise'):
+def _old_prep_data(led_val_top, led_val_down, led_val_right, led_val_left, first_led='bl', order='clockwise'):
     # les LED_ID doivent être dans l'ordre attendu par le led strip... 
     # => first_led = tl, tr, bl ou br (top left, top right, bot left, bot right)
     # => order = clockwise ou counterclockwise
@@ -126,16 +125,77 @@ def prep_data(led_val_top, led_val_down, led_val_right, led_val_left, first_led=
 
     data += '!' # delimiteur utilisé par l'Arduino pour savoir quand s'arrêter de lire.
     return data   
+
+
+def prep_data(led_val_top, led_val_down, led_val_right, led_val_left, first_led='bl', order='clockwise'):
+    # les LED_ID doivent être dans l'ordre attendu par le led strip... 
+    # => first_led = tl, tr, bl ou br (top left, top right, bot left, bot right)
+    # => order = clockwise ou counterclockwise
+    
+    # on met les listes dans l'ordre
+    if order == 'clockwise':
+        if first_led == 'tl':
+            ordered_lists = led_val_top + led_val_right + led_val_down[::-1] + led_val_left[::-1]
+        elif first_led == 'tr':
+            ordered_lists = led_val_right + led_val_down[::-1] + led_val_left[::-1] + led_val_top
+        elif first_led == 'bl':
+            ordered_lists = led_val_left[::-1] + led_val_top + led_val_right + led_val_down[::-1] 
+        elif first_led == 'br':
+            ordered_lists = led_val_down[::-1] + led_val_left[::-1] + led_val_top + led_val_right
+        else:
+            raise ValueError('first_led should be one of tl, tr, bl or br, not {}.'.format(first_led))
+            
+    elif order == 'counterclockwise':
+        if first_led == 'tl':
+            ordered_lists = led_val_left + led_val_down + led_val_right[::-1] + led_val_top[::-1]
+        elif first_led == 'tr':
+            ordered_lists = led_val_top[::-1] + led_val_left + led_val_down + led_val_right[::-1]
+        elif first_led == 'bl':
+            ordered_lists = led_val_down + led_val_right[::-1] + led_val_top[::-1] + led_val_left
+        elif first_led == 'br':
+            ordered_lists = led_val_right[::-1] + led_val_top[::-1] + led_val_left + led_val_down
+        else:
+            raise ValueError('first_led should be one of tl, tr, bl or br, not {}.'.format(first_led))
+    else:
+        raise ValueError('order should be clockwise or counterclockwise, not {}.'.format(order))
+
+    # mise en forme des données à transférer
+    data = bytearray()
+    data.append(1) # start marqueur
+    for i in range(len(ordered_lists)):
+        data.append(ordered_lists[i][0]) #red
+        data.append(ordered_lists[i][1]) #green
+        data.append(ordered_lists[i][2]) #blue
+    data.append(2) # end marqueur
+
+    return data   
    
     
-def send_data(ser, data):
+def _old_send_data(ser, data):
     data = data.encode()
     ser.write(data)
 
-def init_serial(ser, timeout):
+def _old_init_serial(ser, timeout):
     send_data(ser, "0,0,0,0;!")
     time.sleep(timeout)
     send_data(ser, "0,0,0,0;!")
+    time.sleep(timeout)
+    
+def send_data(ser, data):
+    #data = data.encode()
+    ser.write(data)
+
+def init_serial(ser, timeout, n_leds):
+    # init les leds sans les allumer pour initialiser la communication, en envoyant 2 messages
+    data = bytearray()
+    data.append(1) # start marqueur
+    for i in range(n_leds):
+        for j in range(3):
+            data.append(0)
+    data.append(2) # end marqueur
+    send_data(ser, data)
+    time.sleep(timeout)
+    send_data(ser, data)
     time.sleep(timeout)
     
 def visualize_screen_n_leds(screen, led_val_top, led_val_down, led_val_right, led_val_left, led_pos_top_pix, led_pos_down_pix, led_pos_right_pix, led_pos_left_pix, space_between_leds_pix):

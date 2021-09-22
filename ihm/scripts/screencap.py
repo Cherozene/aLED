@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
+import mss
 import serial
 import numpy as np
 import configparser
@@ -145,7 +145,7 @@ def screencap(ser):
             ### à partir des tableaux led_val_ZZZZ crée le bon string data
             data = prep_data(led_val_top, led_val_down, led_val_right, led_val_left, first_led=ORDER_START, order=ORDER_WAY)
 
-            ### on envoie le string "data" au format LED_ID,R,G,B;LED_ID,R,G,B;LED_ID,R,G,B;...;LED_ID,R,G,B;
+            ### on envoie le bytearray "data" (train binaire avec les valeurs R1G1B1....RXGXBX, X nombre de LEDs)
             send_data(ser, data)     
             
             #end_time = time.time()
@@ -158,7 +158,7 @@ if __name__ == '__main__':
 
     # initilisation du lien série avec l'Arduino
     ser = serial.Serial(COMPORT, BAUDRATE, timeout=SERIAL_TIMEOUT)
-    init_serial(ser, SERIAL_TIMEOUT)
+    #init_serial(ser, SERIAL_TIMEOUT)
     screencap(ser)
 
 #import pdb;pdb.set_trace()
